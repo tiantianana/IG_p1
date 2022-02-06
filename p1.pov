@@ -151,18 +151,15 @@ box {
 
 #declare leche = 
 box { 
-  <0,0,0>, < 0.85,2.1,0> 
-  scale 1/2
-  translate <0.3,0,0>
+  <0,0,0>, < 1,2.1,0> 
+  scale <1,1/2,0>
 
   pigment { 
       image_map  {
               jpeg "leche.jpg"
           }
-      }
-
-  translate <-0.3,0,0>
-  scale 2
+  }
+  scale <1,2,0>
 
   rotate <10,0,0>
 
@@ -171,23 +168,20 @@ box {
 #declare mantel = 
 cylinder { 
   <0,0,0>,<0,0.005,0>, 2.00 
+  pigment{
+           tiling 25 // 1~24 Pattern_Number
+              color_map{
+                [ 0.0 color rgb<1,1,1>*1]
+                [ 0.5 color rgb<1,0.5,0>*1]
+                [ 1.0 color rgb<1,1,1>*0]
+                } // end color_map
+           scale 0.1
+           // rotate<-90,0,0> // align to xy plane
+  } // end pigment
+  scale <1,1,1> 
+  rotate<0,0,0> 
+  translate<0,0,1>
 
-                 texture{ pigment{ radial frequency 35 
-                         color_map{ [0.0 color Black]
-                                    [0.4 color White]
-                                    [0.6 color White]
-                                    [1.0 color Black]
-                                  }
-                       }   
-                finish { phong 1 } 
-                rotate<0,0,0> scale 0.25 translate<0,0,0>
-              } // end of texture -----------------------
-
- 
- 
-    scale <1,1,1> 
-    rotate<0,0,0> 
-    translate<0,0,1>
 } // end of cylinder  ------------------------------------
 
 object{
