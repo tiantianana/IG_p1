@@ -19,28 +19,31 @@ global_settings{ assumed_gamma 1.0 }
 #include "math.inc"
 #include "transforms.inc"
 
-#declare Camera_0 = camera {perspective angle 25.5             // front view
+#declare Camera_0 = camera {perspective angle 25.5          // front view
                             location  <0.3 , 3,-10>
                             right     x*image_width/image_height
                             look_at   <0.0 ,0 , 0.0>}
-#declare Camera_1 = camera {/*ultra_wide_angle*/ angle 120   // diagonal view
-                            location  <0.0 , 1.0 ,-0.7>
+#declare Camera_1 = camera {/*ultra_wide_angle*/ angle 120  // de lejos
+                            location  <0.0 , 2. ,-5>
                             right     x*image_width/image_height
-                            look_at   <0.0 , 0.5 , 0.0>}
+                            look_at   <0.0 , 1 , 0.0>}
 #declare Camera_2 = camera {/*ultra_wide_angle*/ angle 90  //right side view
                             location  <6, 0.5 , 0.8>
                             right     x*image_width/image_height
                             look_at   <0.0 , 1.0 , 0.0>}
-#declare Camera_3 = camera {/*ultra_wide_angle*/ angle 90        // top view
-                            location  <0.0 , 2. ,-4>
+#declare Camera_3 = camera {/*ultra_wide_angle*/ angle 30     // top view
+                            location <3, 3.5, -5>
                             right     x*image_width/image_height
-                            look_at   <0.0 , 1.0 , 0.0>}  
+                            look_at <-1,1,0>
+                            translate <5,0,0>
+                            rotate <60,120,0>
+                            }  
                             
                             
 camera {Camera_0}      
 
 // Luz ---------------------------------------------------------------------
-light_source{< -10,1000,680> color White}  
+light_source{<50,500,250> color White}  
 
 sky_sphere { pigment { gradient <0,1,0>
     color_map { [0.00 rgb <0.6,0.7,1.0>]
@@ -64,48 +67,123 @@ box {
     <0,0,0>,  // Near lower left corner
     <1,1,1>   // Far upper right corner
     texture { pigment { color White }}
-    rotate <0,0,0> // <x°, y°, z°>
-    scale <5,1,2>
+    scale <3.5,1,2>
   }
 
 object { 
     mesa
-    translate <-2.5, -1, -4> // <x, y, z>
+    translate <-2, -1, -4.2> // <x, y, z>
 }
 
 #declare copa = 
 sor {
-  12,
-  <0.00,0.00> 
-  <0.2,0.00> 
-  <0.0689, 0.031>
-  <0.0312, 0.050>
-  <0.0583, 0.347>
-  <0.1326, 0.381>
-  <0.1962, 0.464>
-  <0.2387, 0.602>
-  <0.2493, 0.721>
-  <0.2394, 0.864>
-  <0.1991, 1.000>
-  <0.1048, 1.055>
+  10,
+  <0.0, 0.>
+  <0.15, 0.01>
+  <0.24, 0.02>
+  <0.07, 0.1>
+  <0.05, 0.11>
+  <0.06, 0.4>
+  <0.17, 0.6>
+  <0.2, 0.772>
+  <0.2, 1.4>
+  <0.2, 1.5>
   open
-
-   // sturm  // optional!
-    material{   //-----------------------------------------------------------
-        texture { pigment{ rgbf <0.98, 0.92, 0.80, 0.7>*0.8 }
-                  finish { diffuse 0.1 reflection 0.25  
-                           specular 0.8 roughness 0.0003 phong 1 phong_size 400}
-                } // end of texture -------------------------------------------
-        interior{ ior 1.5 caustics 0.5
-                } // end of interior ------------------------------------------
-      } // end of material ----------------------------------------------------
- 
-     scale 0.95  rotate<0,0,0> translate<0,0.0,0>
+  texture {  pigment {rgbf <0.9, 0.9, 0.8, 0.4>}
+  } // end of texture 
+  interior{ ior 1.5 caustics 0.5}
+  scale 0.9 
 } // end of sor --------------------------------- 
 
+
+
+#declare fichas = 
+cylinder { 
+    <0,0,0>,<0,0.2,0>, 0.8
+    texture{ pigment { color <0.1, 0.1, 1.0> }} // end of texture
+      scale 1
+    } // end of cylinder  ------------------------------------
+
 object {
-    copa
-    scale 1.5
-    translate <-1, 0, -3> // <x, y, z>
+    fichas
+    scale 1/3
+    rotate <-5, 0, 0> // <x°, y°, z°>
+    translate<-0.6,0.02,-3.5>
 }
 
+#declare caja = 
+box { <-1,0,-1>,< 1, 1.6, 1>   
+    texture {  pigment {rgbf <0.9, 0.9, 0.9, 0.6>}
+  } // end of texture 
+} // end of box --------------------------------------
+
+object {
+    caja
+    scale 1/3.5
+    rotate <0, 70, 0> // <x°, y°, z°>
+    translate<0,0.001,-3>
+}
+
+object {
+    fichas
+    scale 1/3
+    rotate <-80, -60, 20> // <x°, y°, z°>
+    translate<0.5,0.2,-3.25>
+}
+
+#declare dados =
+superellipsoid { 
+    <0.2,0.2> 
+    texture{ pigment{ color Red} } // end of texture
+    scale <1,1,1> 
+} // -------------- end superellipsoid
+
+// Dado encima de la caja
+object {
+    dados
+    scale 1/14
+    rotate <0, 70, 0> // <x°, y°, z°>
+    translate<0,0.5,-3>
+}
+
+#declare copaDados = 
+
+union {
+    object {
+        copa
+        scale 1.5
+        translate <-0.8, 0, -3> // <x, y, z>
+    }
+
+    object {
+        dados
+        scale 1/14
+        rotate <0, 60, 0> // <x°, y°, z°>
+        translate <-0.76, 0.7, -3> // <x, y, z>
+    }
+
+    object {
+        dados
+        scale 1/14
+        rotate <0, 65, 0> // <x°, y°, z°>
+        translate <-0.7, 0.825, -3> // <x, y, z>
+    }
+
+    object {
+        dados
+        scale 1/14
+        rotate <0, 65, 0> // <x°, y°, z°>
+        translate <-0.68, 0.97, -3> // <x, y, z>
+    }
+
+    object {
+        dados
+        scale 1/12
+        rotate <0, 70, 0> // <x°, y°, z°>
+        translate <-0.65, 1.14, -3> // <x, y, z>
+    }
+}
+
+object {
+    copaDados
+}
