@@ -1,243 +1,111 @@
+// Autores: Ana Tian Villanueva
+// Fecha: 21/02/2022
+// Renderizar con tamaño: -H640 -W535
+//--------------------------------------------------------------------------
+#version 3.7;
+global_settings{ assumed_gamma 1.0 }
+#default{ finish{ ambient 0.1 diffuse 0.9 }} 
+
 #include "colors.inc"
 #include "textures.inc"
+#include "glass.inc"
+#include "metals.inc"
+#include "golds.inc"
+#include "stones.inc"
 #include "woods.inc"
-#include "skies.inc"
+#include "shapes.inc"
+#include "shapes2.inc"
+#include "functions.inc"
+#include "math.inc"
+#include "transforms.inc"
 
-global_settings {
-  assumed_gamma 1.0
-}          
-#default{ finish{ ambient 0.4 diffuse 0.9 }}
+#declare Camera_0 = camera {perspective angle 25.5             // front view
+                            location  <0.3 , 3,-10>
+                            right     x*image_width/image_height
+                            look_at   <0.0 ,0 , 0.0>}
+#declare Camera_1 = camera {/*ultra_wide_angle*/ angle 120   // diagonal view
+                            location  <0.0 , 1.0 ,-0.7>
+                            right     x*image_width/image_height
+                            look_at   <0.0 , 0.5 , 0.0>}
+#declare Camera_2 = camera {/*ultra_wide_angle*/ angle 90  //right side view
+                            location  <6, 0.5 , 0.8>
+                            right     x*image_width/image_height
+                            look_at   <0.0 , 1.0 , 0.0>}
+#declare Camera_3 = camera {/*ultra_wide_angle*/ angle 90        // top view
+                            location  <0.0 , 2. ,-4>
+                            right     x*image_width/image_height
+                            look_at   <0.0 , 1.0 , 0.0>}  
+                            
+                            
+camera {Camera_0}      
 
-//------------------------VALORES UNICOS--------------------------
-//Camara, punto de vision 
-camera {
-  perspective angle 25.5
-  location  <0.3, 3, -8>
-  right     x*image_width/image_height
-  look_at   <0, 0,  0>
-} 
+// Luz ---------------------------------------------------------------------
+light_source{< -10,1000,680> color White}  
 
-sky_sphere {
-  pigment {
-    gradient y
-    color_map {
-      [0.0 rgb <0.6,0.7,1.0>]
-      [0.7 rgb <0.0,0.1,0.8>]
-    }
+sky_sphere { pigment { gradient <0,1,0>
+    color_map { [0.00 rgb <0.6,0.7,1.0>]
+                [0.35 rgb <0.1,0.0,0.8>]
+                [0.65 rgb <0.1,0.0,0.8>]
+                [1.00 rgb <0.6,0.7,1.0>] 
+            } 
+    scale 2         
+    } // end of pigment
+} //end of skysphere
+
+plane { 
+    <0,1,0>, -1
+    texture { 
+        pigment{ color rgb< 0.75, 0.0, 0.10>}
+    } // end of texture 
+} // end of plane
+
+#declare mesa =
+box {
+    <0,0,0>,  // Near lower left corner
+    <1,1,1>   // Far upper right corner
+    texture { pigment { color White }}
+    rotate <0,0,0> // <x°, y°, z°>
+    scale <5,1,2>
   }
-}       
 
-//---------------------FIN VALORES UNICOS-------------------------
-//Fuentes de luz pueden estar entre 1 y n [requerido]
-light_source {
-  <-30, 30, -30>            // posision
-  color White      //color de la luz    
-  //shadowless
+object { 
+    mesa
+    translate <-2.5, -1, -4> // <x, y, z>
 }
 
-// -----------------SECCI�N DE OBJETOS---------------------------
+#declare copa = 
+sor {
+  12,
+  <0.00,0.00> 
+  <0.2,0.00> 
+  <0.0689, 0.031>
+  <0.0312, 0.050>
+  <0.0583, 0.347>
+  <0.1326, 0.381>
+  <0.1962, 0.464>
+  <0.2387, 0.602>
+  <0.2493, 0.721>
+  <0.2394, 0.864>
+  <0.1991, 1.000>
+  <0.1048, 1.055>
+  open
 
-plane {
-  y, -1
-  texture{ T_Wood2     
-                finish { phong 1 } 
-                rotate<0,0,0> scale 0.5 translate<0,0,0>
-              } // end of texture 
-}   
-
-#declare mycup = 
-
-difference {
-
-    union {
-        //cup
-        cylinder {
-            <0,0,0>, <0, 4.75, 0>, 2
-            
-            scale 1/7
-            translate <0,0.1,0>
-            
-            pigment { 
-                image_map  {
-                    jpeg "fdp.jpg"
-                    map_type 2
-                }
-            }
-
-            translate <0,-0.1,0>
-            scale 7
-            finish { ambient .4}
-
-            rotate <0, -100, 0> // <x°, y°, z°>
-        }
-
-
-        // handle
-        sphere_sweep {
-            b_spline 7,
-            < .7, 2.2, 0> .8
-            <1.5, .5, 0>, .3
-            <3.1, .5, 0>, .3
-            <4, 2.4, 0> .3
-            <3.1, 4.1, 0>, .3
-            <1.5, 4.1, 0>, .3
-            <.7, 2.6 , 0>, .6
-            pigment {Black}
-            finish { ambient .4}
-        }
-    }
-
-    // inside cup
-    cylinder {
-        <0, .2, 0>, <0, 4.9, 0> 1.8
-        pigment {White}
-        finish {ambient .4}
-    }
-
-}
-
-#declare cuenco = 
-    lathe{  // rotates a 2-D outline of points around the Y axis to create a 3-D shape
-    quadratic_spline // quadratic_spline | cubic_spline | linear_spline 
-    9,      // number of points,
-    //<1.1, 1>,
-    <1.4, 1>, // list of <x,y> points,
-    <1.2, 2.35>, 
-    <1.1, 3>,
-    <0.0, 3.00000000000000001>,
-    <1.0, 3.01>, 
-    <2.0, 3.5>,
-    <2.8, 4.555>,
-    <2.7, 4.65>,
-    <2.8, 4.65>
-    // sturm        
-
-    pigment {White}
-
-    scale<0.98,1.045,0.98>*0.125 
-    rotate<0,0,0> 
-    translate<0,0.0,0>
-} // 
-
-#declare huevo = 
-ovus{ 1.00, 0.65 // base_radius, top_radius  with: top_radius< base_radius! 
-      texture{ pigment{ color rgb< 1.0, 0.9, 0.8>*0.9}  
-            // normal { bumps 0.75 scale 0.02 }
-               finish { phong 0.3 reflection { 0.00 metallic 0.00}  }
-             } // end of texture 
-      scale 0.5
-      rotate<0,0,0>
-      translate<0,0.5,0> 
-    } // ------------------------------------------------------------------ 
-//-------------------------------------------------------------------------
-
-#declare cereales = 
-
-box { 
-  <0,0,0>, < 1.6,2,1> 
-  scale 1/2
-
-  pigment { 
-      image_map  {
-              jpeg "cereales.jpg"
-          }
-      }
-
-  scale 2
-  rotate <10,0,0>
-
-} // end of box --------------------------------------
-
-
-#declare leche = 
-box { 
-  <0,0,0>, < 1,2.1,0> 
-  scale <1,1/2,0>
-
-  pigment { 
-      image_map  {
-              jpeg "leche.jpg"
-          }
-  }
-  scale <1,2,0>
-
-  rotate <10,0,0>
-
-} // end of box --------------------------------------
-
-#declare mantel = 
-cylinder { 
-  <0,0,0>,<0,0.005,0>, 2.00 
-  pigment{
-           tiling 25 // 1~24 Pattern_Number
-              color_map{
-                [ 0.0 color rgb<1,1,1>*1]
-                [ 0.5 color rgb<1,0.5,0>*1]
-                [ 1.0 color rgb<1,1,1>*0]
-                } // end color_map
-           scale 0.1
-           // rotate<-90,0,0> // align to xy plane
-  } // end pigment
-  scale <1,1,1> 
-  rotate<0,0,0> 
-  translate<0,0,1>
-
-} // end of cylinder  ------------------------------------
-
-object{
-    mycup
-    scale 1/14
-    translate<0.55,1.2,-4.5> 
-}
-
-object{
-    cuenco
-    scale 2/3
-    translate<0.1,1,-4.5>
-}
-
-object {
-  huevo
-  scale 1/5
-  translate <-0.3,1.2, -4.5>
-}
-
-object {
-  cereales
-  scale 1/3
-  translate <0,1.2, -4.2>
-}
-
-
-object {
-  leche
-  scale 1/3
-  translate <-0.4, 1.2, -4.2>
-}
-
-object {
-    mantel
-    scale 1/2
-    translate <0.2, 1, -4.2>
-}
-
-#declare fondo =
-  box { 
-      <0,0,0>,< 1, 1, 1>   
-      texture{ pigment{ 
-          bozo turbulence 0.76
-          color_map { 
-              [0.0 rgb <0.6,0.7,1.0>]
-              [0.7 rgb <0.0,0.1,0.8>]
-              [0.6 rgb <1,1,1>]
-              [1.0 rgb <0.5,0.5,0.5>]}
-              scale 0.25
-          }
-          finish { phong 1 } 
-          rotate<0,0,0> scale 1 translate<0,0,0>
-          } // end of texture 
-      scale <30,4,20> rotate<0,-15,0> translate<-8.5,-0.4,-0.9> 
-  } // end of box --------------------------------------
-
- object { fondo }
+   // sturm  // optional!
+    material{   //-----------------------------------------------------------
+        texture { pigment{ rgbf <0.98, 0.92, 0.80, 0.7>*0.8 }
+                  finish { diffuse 0.1 reflection 0.25  
+                           specular 0.8 roughness 0.0003 phong 1 phong_size 400}
+                } // end of texture -------------------------------------------
+        interior{ ior 1.5 caustics 0.5
+                } // end of interior ------------------------------------------
+      } // end of material ----------------------------------------------------
  
+     scale 0.95  rotate<0,0,0> translate<0,0.0,0>
+} // end of sor --------------------------------- 
+
+object {
+    copa
+    scale 1.5
+    translate <-1, 0, -3> // <x, y, z>
+}
+
