@@ -19,30 +19,38 @@ global_settings{ assumed_gamma 1.0 }
 #include "math.inc"
 #include "transforms.inc"
 
-#declare Camera_0 = camera {perspective angle 25          // front view
-                            location  <0.2 , 2.5,-10>
-                            right     x*image_width/image_height
-                            look_at   <0.0 ,0 , 0.0>}
-#declare Camera_1 = camera {/*ultra_wide_angle*/ angle 120  // de lejos
-                            location  <0.0 , 2. ,-5>
-                            right     x*image_width/image_height
-                            look_at   <0.0 , 1 , 0.0>}
-#declare Camera_2 = camera {/*ultra_wide_angle*/ angle 90  //right side view
-                            location  <6, 0.5 , 0.8>
-                            right     x*image_width/image_height
-                            look_at   <0.0 , 1.0 , 0.0>}
-#declare Camera_3 = camera {/*ultra_wide_angle*/ angle 30     // top view
-                            location <3, 3.5, -5>
-                            right     x*image_width/image_height
-                            look_at <-1,1,0>
-                            translate <5,0,0>
-                            rotate <60,120,0>
-                            }  
+#declare Camera_0 = 
+camera {perspective angle 25          // front view
+        location  <0.2,2,-10>
+        right     x*image_width/image_height
+        look_at   <0.0 ,0.3 , 0.0>}
+
+#declare Camera_1 = 
+camera {/*ultra_wide_angle*/
+        angle 120  // de lejos
+        location  <0.0 , 2. ,-5>
+        right     x*image_width/image_height
+        look_at   <0.0 , 1 , 0.0>}
+
+#declare Camera_2 = 
+camera {/*ultra_wide_angle*/ 
+        angle 90  //right side view
+        location  <6, 0.5 , 0.8>
+        right     x*image_width/image_height
+        look_at   <0.0 , 1.0 , 0.0>}
+
+#declare Camera_3 = 
+camera {/*ultra_wide_angle*/ 
+        angle 30     // top view
+        location <3, 3.5, -5>
+        right     x*image_width/image_height
+        look_at <-1,1,0>
+        translate <5,0,0>
+        rotate <60,120,0>}  
                             
-                            
+/* INICIO VISTA */                            
 camera {Camera_0}      
 
-// Luz ---------------------------------------------------------------------
 light_source{<50,600,350> color White}  
 
 sky_sphere { pigment { gradient <0,1,0>
@@ -61,7 +69,9 @@ plane {
         pigment{ color rgb< 0.75, 0.0, 0.10>}
     } // end of texture 
 } // end of plane
+/* FIN VISTA */
 
+/* INICIO OBJETOS INDIVIDUALES */
 #declare mesa =
 box {
     <0,0,0>,  // Near lower left corner
@@ -95,8 +105,6 @@ sor {
   scale 0.9 
 } // end of sor --------------------------------- 
 
-
-
 #declare fichas = 
 cylinder { 
     <0,0,0>,<0,0.2,0>, 0.8
@@ -104,35 +112,18 @@ cylinder {
       scale 1
     } // end of cylinder  ------------------------------------
 
-object {
-    fichas
-    scale 1/3
-    rotate <-5, 0, 0> // <x°, y°, z°>
-    translate<-0.6,0.02,-3.5>
-}
 
 #declare caja = 
 superellipsoid {<0.1,0.1> 
-    texture{ pigment{ rgbf <0.98, 0.98, 0.98, 0.9> }
-            finish { diffuse 0.1 reflection 0.2  
-                    specular 0.8 roughness 0.0003 phong 1 phong_size 400}
-    } // end of texture -------------------------------------------
+    material{   //-----------------------------------------------------------
+        texture { pigment{ rgbf <0.98, 0.92, 0.80, 0.7> }
+                  finish { diffuse 0.1 reflection 0.25  
+                           specular 0.8 roughness 0.0003 phong 1 phong_size 400}
+                } // end of texture -------------------------------------------
+        interior{ ior 1.5 caustics 0.5
+                } // end of interior ------------------------------------------
+      } // end of material ----------------------------------------------------
 } // end of box --------------------------------------
-
-object {
-    caja
-    scale <1/3,1/1.7,1/3>
-    rotate <0, 70, 0> // <x°, y°, z°>
-    translate<0.1,0.001,-3>
-}
-
-// Ficha para la caja
-object {
-    fichas
-    scale 1/3.2
-    rotate <-85, -60, 20> // <x°, y°, z°>
-    translate<0.55,0.25,-3.2>
-}
 
 #declare dados =
 superellipsoid { 
@@ -141,16 +132,11 @@ superellipsoid {
     scale <1,1,1> 
 } // -------------- end superellipsoid
 
-// Dado encima de la caja
-object {
-    dados
-    scale 1/14
-    rotate <0, 70, 0> // <x°, y°, z°>
-    translate<0.1,0.65,-3>
-}
+/* FIN OBJETOS INDIVIDUALES */
 
+
+/* INICIO OBJETOS COMPUESTOS */
 #declare copaDados = 
-
 union {
     object {
         copa
@@ -183,10 +169,44 @@ union {
         dados
         scale 1/12
         rotate <0, 70, 0> // <x°, y°, z°>
-        translate <-0.65, 1.14, -3> // <x, y, z>
+        translate <-0.65, 1.13, -3> // <x, y, z>
+    }
+
+    object {
+    fichas
+    scale 1/3
+    rotate <-5, 0, 0> // <x°, y°, z°>
+    translate<-0.6,0.02,-3.5>
     }
 }
 
+#declare cajaDados = 
+union {
+    object {
+    caja
+    scale <1/3,1/1.7,1/3>
+    rotate <0, 70, 0> // <x°, y°, z°>
+    translate<0,0.001,-3>
+    }
+    // Dado encima de la caja
+    object {
+    dados
+    scale 1/14
+    rotate <0, 70, 0> // <x°, y°, z°>
+    translate<0,0.65,-3>
+    }
+    object {
+    fichas
+    scale 1/3.2
+    rotate <-85, -60, 20> // <x°, y°, z°>
+    translate<0.45,0.25,-3.25>
+    }
+}
 object {
     copaDados
 }
+
+object {
+    cajaDados
+}
+/* FIN OBJETOS COMPUESTOS */
