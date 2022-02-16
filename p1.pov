@@ -19,8 +19,8 @@ global_settings{ assumed_gamma 1.0 }
 #include "math.inc"
 #include "transforms.inc"
 
-#declare Camera_0 = camera {perspective angle 25.5          // front view
-                            location  <0.3 , 3,-10>
+#declare Camera_0 = camera {perspective angle 25          // front view
+                            location  <0.2 , 2.5,-10>
                             right     x*image_width/image_height
                             look_at   <0.0 ,0 , 0.0>}
 #declare Camera_1 = camera {/*ultra_wide_angle*/ angle 120  // de lejos
@@ -43,7 +43,7 @@ global_settings{ assumed_gamma 1.0 }
 camera {Camera_0}      
 
 // Luz ---------------------------------------------------------------------
-light_source{<50,500,250> color White}  
+light_source{<50,600,350> color White}  
 
 sky_sphere { pigment { gradient <0,1,0>
     color_map { [0.00 rgb <0.6,0.7,1.0>]
@@ -67,7 +67,7 @@ box {
     <0,0,0>,  // Near lower left corner
     <1,1,1>   // Far upper right corner
     texture { pigment { color White }}
-    scale <3.5,1,2>
+    scale <4,1,2>
   }
 
 object { 
@@ -100,7 +100,7 @@ sor {
 #declare fichas = 
 cylinder { 
     <0,0,0>,<0,0.2,0>, 0.8
-    texture{ pigment { color <0.1, 0.1, 1.0> }} // end of texture
+    texture{ pigment { color rgb <0.0, 0.5, 1.0> }} // end of texture
       scale 1
     } // end of cylinder  ------------------------------------
 
@@ -112,23 +112,26 @@ object {
 }
 
 #declare caja = 
-box { <-1,0,-1>,< 1, 1.6, 1>   
-    texture {  pigment {rgbf <0.9, 0.9, 0.9, 0.6>}
-  } // end of texture 
+superellipsoid {<0.1,0.1> 
+    texture{ pigment{ rgbf <0.98, 0.98, 0.98, 0.9> }
+            finish { diffuse 0.1 reflection 0.2  
+                    specular 0.8 roughness 0.0003 phong 1 phong_size 400}
+    } // end of texture -------------------------------------------
 } // end of box --------------------------------------
 
 object {
     caja
-    scale 1/3.5
+    scale <1/3,1/1.7,1/3>
     rotate <0, 70, 0> // <x°, y°, z°>
-    translate<0,0.001,-3>
+    translate<0.1,0.001,-3>
 }
 
+// Ficha para la caja
 object {
     fichas
-    scale 1/3
-    rotate <-80, -60, 20> // <x°, y°, z°>
-    translate<0.5,0.2,-3.25>
+    scale 1/3.2
+    rotate <-85, -60, 20> // <x°, y°, z°>
+    translate<0.55,0.25,-3.2>
 }
 
 #declare dados =
@@ -143,7 +146,7 @@ object {
     dados
     scale 1/14
     rotate <0, 70, 0> // <x°, y°, z°>
-    translate<0,0.5,-3>
+    translate<0.1,0.65,-3>
 }
 
 #declare copaDados = 
