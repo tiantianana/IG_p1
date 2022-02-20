@@ -49,9 +49,22 @@ camera {/*ultra_wide_angle*/
         rotate <60,120,0>}  
                             
 /* INICIO VISTA */                            
-camera {Camera_0}      
+camera {Camera_0}    
 
-light_source{<50,600,350> color White}  
+light_source{
+    <0,6,-2.5> 
+    color White
+    spotlight
+    radius 90
+    falloff 10
+    tightness 10
+    point_at <0, 2, 0>
+}    
+
+light_source{
+    <0,6,-2.4> 
+    color White
+}    
 
 sky_sphere { 
     pigment { gradient <0,1,0>
@@ -90,19 +103,19 @@ object {
 sor {
   10,
   <0, 0>
-  <0.15, 0.02>
-  <0.18, 0.04>
-  <0.08, 0.06>
-  <0.04, 0.11>
-  <0.05, 0.4>
-  <0.13, 0.6>
-  <0.15, 0.8>
-  <0.17, 1.4>
-  <0.17, 1.5> // Top
+  <0.255, 0.034>
+  <0.306, 0.068>
+  <0.136, 0.102>
+  <0.068, 0.187>
+  <0.085, 0.68>
+  <0.22, 1.02>
+  <0.27, 1.36>
+  <0.33, 2.38>
+  <0.33, 3> // Top
   open
-  texture {  pigment {rgbf <0.9, 0.9, 0.8, 0.4>}
-  } // end of texture 
-  interior{ ior 1.5 caustics 0.5}
+  texture{ pigment{ rgbf <0.9, 0.9, 0.9, 0.8> }
+  } // end of texture ------------------------------------------- 
+  interior{ ior 1.35 caustics 0.5}
 } // end of sor --------------------------------- 
 
 #declare fichas = 
@@ -114,16 +127,18 @@ cylinder {
 
 #declare caja = 
 superellipsoid {<0.1,0.1> 
+    scale <1/3,1/3,1/3>
     texture{ pigment{ rgbf <0.9, 0.9, 0.9, 0.5> }
-            finish { diffuse 0.1 reflection 0.2  
+    finish { diffuse 0.1 reflection 0.15 
                     specular 0.8 roughness 0.0003 phong 1 phong_size 400}
+
     } // end of texture -------------------------------------------
 } // end of box --------------------------------------
 
 
 #declare DiceBody = intersection {
   box { <-.5, -.5, -.5>, <.5, .5, .5> }
-  sphere { <0, 0, 0>, .5*1.41421358 }
+  sphere { <0, 0, 0>, .5*1.4 }
 }
 
 #declare One = sphere { <0, .6, 0>, .14 }
@@ -156,21 +171,21 @@ superellipsoid {<0.1,0.1>
   sphere { <.25, .6, 0>, .14 }
 }
 
-#declare dados = difference {
+#declare dados = 
+difference {
   object {
     DiceBody
     pigment { color Red }
     //finish { phong .7 phong_size 20 ambient .4 }
   }
   union {
-    object { One rotate -90*z }
+    object { One rotate -90*x }
     object { Two }
-    object { Three rotate -90*x }
+    object { Three rotate -90*z }
     object { Four rotate 90*x }
     object { Five rotate 180*x }
     object { Six rotate 90*z }
     pigment { color White }
-    //finish { phong .9 phong_size 15 }
   }
   bounded_by { box { <-.52, -.52, -.52>, <.52, .52, .52> } }
 }
@@ -182,36 +197,35 @@ superellipsoid {<0.1,0.1>
 union {
     object {
         copa
-        scale 1.7
-        translate <-0.7, 0, -3.2> // <x, y, z>
+        translate <-0.65, 0, -3.2> // <x, y, z>
     }
 
     object {
         dados
-        scale 1/14
-        rotate <0, 60, 0> // <x°, y°, z°>
-        translate <-0.8, 0.7, -3> // <x, y, z>
+        scale 1/7
+        rotate <0, 50, 0> // <x°, y°, z°>
+        translate<-0.6,1,-3.2>
     }
 
     object {
         dados
-        scale 1/14
-        rotate <0, 65, 0> // <x°, y°, z°>
-        translate <-0.75, 0.825, -3> // <x, y, z>
+        scale 1/6
+        rotate <0, 50, 90> // <x°, y°, z°>
+        translate<-0.57,1.15,-3.2>
     }
 
     object {
         dados
-        scale 1/14
-        rotate <0, 65, 0> // <x°, y°, z°>
-        translate <-0.725, 0.97, -3> // <x, y, z>
+        scale 1/6
+        rotate <0, 230, 0> // <x°, y°, z°>
+        translate<-0.55,1.35,-3.2>
     }
 
     object {
         dados
-        scale 1/12
-        rotate <0, 70, 0> // <x°, y°, z°>
-        translate <-0.7, 1.13, -3> // <x, y, z>
+        scale 1/5
+        rotate <10, 180, 0> // <x°, y°, z°>
+         translate<-0.53,1.55,-3.2>
     }
 
     object {
@@ -226,30 +240,30 @@ union {
 union {
     object {
     caja
-    scale <1/3,1/1.7,1/3>
-    rotate <0, 70, 0> // <x°, y°, z°>
+    rotate <0, 65, 0> // <x°, y°, z°>
     translate<0,0.001,-3>
     }
     // Dado encima de la caja
     object {
     dados
-    scale 1/4
-    rotate <0, 70, 0> // <x°, y°, z°>
-    translate<0,0.65,-3>
+    scale 1/5
+    rotate <5, 25, 180> // <x°, y°, z°>
+    translate<0,0.44,-3>
     }
     object {
     fichas
     scale 1/3.2
     rotate <-85, -60, 20> // <x°, y°, z°>
-    translate<0.4,0.25,-3.4>
+    translate<0.4,0,-3.4>
     }
 }
 object {
     copaDados
-    translate<0,-0.4,0>
+    translate <0,-0.4,0>
 }
 
 object {
     cajaDados
+    translate <0.15,-0.1,-0.2>
 }
 /* FIN OBJETOS COMPUESTOS */
