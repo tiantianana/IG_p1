@@ -1,7 +1,8 @@
 // Autor: Ana Tian Villanueva
 // Fecha: 21/02/2022
-// Renderizar con tamaño: -H570 -W530 (1x1)
+// Renderizar con tamaño: -W560 -H529
 //--------------------------------------------------------------------------
+
 #version 3.7;
 global_settings{ assumed_gamma 1.0 }
 #default{ finish{ ambient 0.1 diffuse 0.9 }} 
