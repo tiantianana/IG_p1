@@ -62,8 +62,8 @@ light_source{
 }    
 
 light_source{
-    <0,6,-2.4> 
-    color White
+    <0,6,-2.2> 
+    color rgb <0.8, 0.8, 0.8>
 }    
 
 sky_sphere { 
@@ -113,7 +113,13 @@ sor {
   <0.33, 2.38>
   <0.33, 3> // Top
   open
-  texture{ pigment{ rgbf <0.9, 0.9, 0.9, 0.8> }
+  texture{ 
+      pigment{ rgbf <0.9, 0.9, 0.9, 0.5> }
+      finish {
+      ambient .1
+      diffuse .1
+      reflection .1
+    }
   } // end of texture ------------------------------------------- 
   interior{ ior 1.35 caustics 0.5}
 } // end of sor --------------------------------- 
@@ -128,69 +134,71 @@ cylinder {
 #declare caja = 
 superellipsoid {<0.1,0.1> 
     scale <1/3,1/3,1/3>
-    texture{ pigment{ rgbf <0.9, 0.9, 0.9, 0.5> }
-    finish { diffuse 0.1 reflection 0.15 
-                    specular 0.8 roughness 0.0003 phong 1 phong_size 400}
+    texture{ pigment{ rgbf <0.9, 0.9, 0.9, 0.7> }
+    finish { diffuse 0.1 reflection 0.1
+                    specular 0.4}
 
     } // end of texture -------------------------------------------
 } // end of box --------------------------------------
 
-
-#declare DiceBody = intersection {
-  box { <-.5, -.5, -.5>, <.5, .5, .5> }
-  sphere { <0, 0, 0>, .5*1.4 }
+/* INICIO DADOS */
+#declare DiceBody = 
+intersection {
+    box { <-.5, -.5, -.5>, <.5, .5, .5> }
+    sphere { <0, 0, 0>, .5*1.4 }
 }
 
 #declare One = sphere { <0, .6, 0>, .14 }
 
 #declare Two = union {
-  sphere { <-.25, .6, -.25>, .14 }
-  sphere { <.25, .6, .25>, .14 }
+    sphere { <-.25, .6, -.25>, .14 }
+    sphere { <.25, .6, .25>, .14 }
 }
 
 #declare Three = union {
-  object { One }
-  object { Two }
+    object { One }
+    object { Two }
 }
 
 #declare Four = union {
-  sphere { <-.25, .6, -.25>, .14 }
-  sphere { <.25, .6, -.25>, .14 }
-  sphere { <-.25, .6, .25>, .14 }
-  sphere { <.25, .6, .25>, .14 }
+    sphere { <-.25, .6, -.25>, .14 }
+    sphere { <.25, .6, -.25>, .14 }
+    sphere { <-.25, .6, .25>, .14 }
+    sphere { <.25, .6, .25>, .14 }
 }
 
 #declare Five = union {
-  object { Four }
-  object { One }
+    object { Four }
+    object { One }
 }
 
 #declare Six = union {
-  object { Four }
-  sphere { <-.25, .6, 0>, .14 }
-  sphere { <.25, .6, 0>, .14 }
+    object { Four }
+    sphere { <-.25, .6, 0>, .14 }
+    sphere { <.25, .6, 0>, .14 }
 }
 
 #declare dados = 
 difference {
-  object {
-    DiceBody
-    pigment { color Red }
-    //finish { phong .7 phong_size 20 ambient .4 }
-  }
-  union {
-    object { One rotate -90*x }
-    object { Two }
-    object { Three rotate -90*z }
-    object { Four rotate 90*x }
-    object { Five rotate 180*x }
-    object { Six rotate 90*z }
-    pigment { color White }
-  }
-  bounded_by { box { <-.52, -.52, -.52>, <.52, .52, .52> } }
+    object {
+        DiceBody
+        pigment { color Red }
+    }
+    union {
+        object { One rotate -90*x }
+        object { Two }
+        object { Three rotate -90*z }
+        object { Four rotate 90*x }
+        object { Five rotate 180*x }
+        object { Six rotate 90*z }
+        pigment { color White }
+    }
+    bounded_by { box { <-.5, -.5, -.5>, <.5, .5, .5> } }
 }
+/* FIN DADOS */
 /* FIN OBJETOS INDIVIDUALES */
 
+/*************************************************************/
 
 /* INICIO OBJETOS COMPUESTOS */
 #declare copaDados = 
@@ -202,6 +210,7 @@ union {
 
     object {
         dados
+        no_shadow
         scale 1/7
         rotate <0, 50, 0> // <x°, y°, z°>
         translate<-0.6,1,-3.2>
@@ -209,6 +218,7 @@ union {
 
     object {
         dados
+        no_shadow
         scale 1/6
         rotate <0, 50, 90> // <x°, y°, z°>
         translate<-0.57,1.15,-3.2>
@@ -216,6 +226,7 @@ union {
 
     object {
         dados
+        no_shadow
         scale 1/6
         rotate <0, 230, 0> // <x°, y°, z°>
         translate<-0.55,1.35,-3.2>
@@ -223,8 +234,9 @@ union {
 
     object {
         dados
+        no_shadow
         scale 1/5
-        rotate <10, 180, 0> // <x°, y°, z°>
+        rotate <0, 150, -20> // <x°, y°, z°>
          translate<-0.53,1.55,-3.2>
     }
 
@@ -254,7 +266,7 @@ union {
     fichas
     scale 1/3.2
     rotate <-85, -60, 20> // <x°, y°, z°>
-    translate<0.4,0,-3.4>
+    translate<0.5,0,-3.3>
     }
 }
 object {
