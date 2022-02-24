@@ -20,11 +20,18 @@ global_settings{ assumed_gamma 1.0 }
 #include "math.inc"
 #include "transforms.inc"
 
+/* Incluir objetos */
+#include "caja.inc"
+#include "copa.inc"
+#include "dado.inc"
+#include "ficha.inc"
+#include "mesa.inc"
+
 #declare Camera_0 = 
 camera {perspective angle 25          // front view
-        location  <0,2.5,-10>
+        location  <0,2.3,-10>
         right     x*image_width/image_height
-        look_at   <0.0 ,0 , 0.0>}
+        look_at   <0.0 , 0 , 0.0>}
 
 #declare Camera_1 = 
 camera {/*ultra_wide_angle*/
@@ -86,123 +93,15 @@ plane {
 } // end of plane
 /* FIN VISTA */
 
-/* INICIO OBJETOS INDIVIDUALES */
-#declare mesa =
-box {
-    <0,0,0>,  // Near lower left corner
-    <1,1,1>   // Far upper right corner
-    texture { pigment { color White }}
-    scale <4,1,2>
-  }
-
 object { 
     mesa
     translate <-2, -1.38, -4.2> // <x, y, z>
 }
 
-#declare copa = 
-sor {
-  10,
-  <0, 0>
-  <0.255, 0.034>
-  <0.306, 0.068>
-  <0.136, 0.102>
-  <0.068, 0.187>
-  <0.085, 0.68>
-  <0.22, 1.02>
-  <0.27, 1.36>
-  <0.33, 2.38>
-  <0.33, 3> // Top
-  open
-  texture{ 
-      pigment{ rgbf <0.9, 0.9, 0.9, 0.5> }
-      finish {
-      ambient .1
-      diffuse .1
-      reflection .1
-    }
-  } // end of texture ------------------------------------------- 
-  interior{ ior 1.35 caustics 0.5}
-} // end of sor --------------------------------- 
-
-#declare fichas = 
-cylinder { 
-    <0,0,0>,<0,0.2,0>, 0.8
-    texture{ pigment { color rgb <0.0, 0.5, 1.0> }} // end of texture
-      scale 1
-    } // end of cylinder  ------------------------------------
-
-#declare caja = 
-superellipsoid {<0.1,0.1> 
-    scale <1/3,1/3,1/3>
-    texture{ pigment{ rgbf <0.9, 0.9, 0.9, 0.7> }
-    finish { diffuse 0.1 reflection 0.1
-                    specular 0.4}
-
-    } // end of texture -------------------------------------------
-} // end of box --------------------------------------
-
-/* INICIO DADOS */
-#declare DiceBody = 
-intersection {
-    box { <-.5, -.5, -.5>, <.5, .5, .5> }
-    sphere { <0, 0, 0>, .5*1.4 }
-}
-
-#declare One = sphere { <0, .6, 0>, .14 }
-
-#declare Two = union {
-    sphere { <-.25, .6, -.25>, .14 }
-    sphere { <.25, .6, .25>, .14 }
-}
-
-#declare Three = union {
-    object { One }
-    object { Two }
-}
-
-#declare Four = union {
-    sphere { <-.25, .6, -.25>, .14 }
-    sphere { <.25, .6, -.25>, .14 }
-    sphere { <-.25, .6, .25>, .14 }
-    sphere { <.25, .6, .25>, .14 }
-}
-
-#declare Five = union {
-    object { Four }
-    object { One }
-}
-
-#declare Six = union {
-    object { Four }
-    sphere { <-.25, .6, 0>, .14 }
-    sphere { <.25, .6, 0>, .14 }
-}
-
-#declare dados = 
-difference {
-    object {
-        DiceBody
-        pigment { color Red }
-    }
-    union {
-        object { One rotate -90*x }
-        object { Two }
-        object { Three rotate -90*z }
-        object { Four rotate 90*x }
-        object { Five rotate 180*x }
-        object { Six rotate 90*z }
-        pigment { color White }
-    }
-    bounded_by { box { <-.5, -.5, -.5>, <.5, .5, .5> } }
-}
-/* FIN DADOS */
-/* FIN OBJETOS INDIVIDUALES */
-
 /*************************************************************/
 
 /* INICIO OBJETOS COMPUESTOS */
-#declare copaDados = 
+#declare copadado = 
 union {
     object {
         copa
@@ -210,7 +109,7 @@ union {
     }
 
     object {
-        dados
+        dado
         no_shadow
         scale 1/7
         rotate <0, 50, 0> // <x°, y°, z°>
@@ -218,7 +117,7 @@ union {
     }
 
     object {
-        dados
+        dado
         no_shadow
         scale 1/6
         rotate <0, 50, 90> // <x°, y°, z°>
@@ -226,7 +125,7 @@ union {
     }
 
     object {
-        dados
+        dado
         no_shadow
         scale 1/6
         rotate <0, 230, 0> // <x°, y°, z°>
@@ -234,7 +133,7 @@ union {
     }
 
     object {
-        dados
+        dado
         no_shadow
         scale 1/5
         rotate <0, 150, -20> // <x°, y°, z°>
@@ -242,41 +141,43 @@ union {
     }
 
     object {
-    fichas
+    ficha
     scale 1/3.25
     rotate <-5, 0, 0> // <x°, y°, z°>
-    translate<-0.45,0.02,-3.5>
+    translate<-0.45,0.1,-3.5>
     }
 }
 
-#declare cajaDados = 
+#declare cajadado = 
 union {
     object {
     caja
+    scale 1/5.5
     rotate <0, 65, 0> // <x°, y°, z°>
     translate<0,0.001,-3>
     }
     // Dado encima de la caja
     object {
-    dados
+    dado
     scale 1/5
     rotate <5, 25, 180> // <x°, y°, z°>
     translate<0,0.44,-3>
     }
     object {
-    fichas
+    ficha
     scale 1/3.2
     rotate <-85, -60, 20> // <x°, y°, z°>
-    translate<0.5,0,-3.3>
+    translate<0.5,-0.1,-3.3>
     }
-}
-object {
-    copaDados
-    translate <0,-0.4,0>
 }
 
 object {
-    cajaDados
-    translate <0.15,-0.1,-0.2>
+    copadado
+    translate <0,-0.45,0>
+}
+
+object {
+    cajadado
+    translate <0.15,0,-0.2>
 }
 /* FIN OBJETOS COMPUESTOS */
