@@ -161,7 +161,7 @@ union {
     dado
     scale 1/5
     rotate <5, 25, 180> // <x°, y°, z°>
-    translate<0,0.35,-3>
+    translate<0,0.32,-3>
     }
     object {
     ficha
