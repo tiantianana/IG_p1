@@ -10,12 +10,12 @@
 #declare ficha = 
 union {
     cylinder { 
-    <0,0,0>,<0,0.201,0>, 0.6
+    <0,0,0>,<0,0.1801,0>, 0.6
     texture{ pigment { color White} } // end of texture
       scale 1
     } // end of cylinder  ------------------------------------
     cylinder { 
-        <0,0,0>,<0,0.2,0>, 0.8
+        <0,0,0>,<0,0.18,0>, 0.8
         scale 4
         translate <0,0.1,0>
         texture{ pigment{ checker // 2 colors/textures

@@ -144,7 +144,7 @@ union {
     ficha
     scale 1/3.25
     rotate <-5, 0, 0> // <x°, y°, z°>
-    translate<-0.45,0.1,-3.5>
+    translate<-0.4,0.08,-3.6>
     }
 }
 
@@ -154,20 +154,20 @@ union {
     caja
     scale 1/5.5
     rotate <0, 65, 0> // <x°, y°, z°>
-    translate<0,0.001,-3>
+    translate<0,-0.12,-3>
     }
     // Dado encima de la caja
     object {
     dado
     scale 1/5
     rotate <5, 25, 180> // <x°, y°, z°>
-    translate<0,0.44,-3>
+    translate<0,0.35,-3>
     }
     object {
     ficha
     scale 1/3.2
     rotate <-85, -60, 20> // <x°, y°, z°>
-    translate<0.5,-0.1,-3.3>
+    translate<0.5,-0.15,-3.3>
     }
 }
 
@@ -178,6 +178,6 @@ object {
 
 object {
     cajadado
-    translate <0.15,0,-0.2>
+    translate <0.16,0,-0.2>
 }
 /* FIN OBJETOS COMPUESTOS */
