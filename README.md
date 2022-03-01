@@ -8,6 +8,7 @@ Sistema operativo: Ubuntu 20.04.3 LTS
 
 ### Objetivo de la práctica
 El objetivo de esta actividad es modelar los objetos que se muestran en la siguiente imagen, utilizando povray.
+
 ![original](original.png)
 
 ### Funcionamiento del programa
